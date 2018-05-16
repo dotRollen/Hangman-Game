@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hangman Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Adding Bootstrap v4 and local CSS stylesheet-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
+
+    <!--Adding local Javascript-->
+    <script src="assets/javascript/game.js"></script>
+</head>
+<body>
+    <audio src="assets/media/Shall-we-play-a-game.mp3" autoplay>
+    <p>If you are reading this, it is because your browser does not support the audio element.</p>
+    </audio>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h1>> SHALL WE PLAY A GAME?...</h1>
+                <h2>> Press any key to get started...</h2>
+                <p><span id="word"></span></p>
+                <p>> WINS: <span id="wins-score">0</span></p>
+                <p>> TRIES REMAINING: <span id="guesses-left">15</span></p>
+                <p>> LETTERS ALREADY GUESSED: <span id="letters-guessed"> </span></p>
+                <p>> WORD: <span id="letter1"> _</span><span id="letter2"> _</span><span id="letter3"> _</span><span id="letter4"> _</span>
+                    <span id="letter5"> _</span><span id="letter6"> _</span><span id="letter7"> _</span><span id="letter7"> _</span>
+                    ...<span class="blinking-cursor">|</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
