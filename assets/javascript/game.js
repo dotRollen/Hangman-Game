@@ -1,11 +1,11 @@
 var wargame = {
     winsScore: 0,
-    triesLeft: 10,
+    triesLeft: 12,
     lettersTried: [],
     wordBank: [
         "wargames",
-        "David",
-        "Jennifer",
+        "david",
+        "jennifer",
     ],
     pressStart: false,
     wordPicked: "",
@@ -15,8 +15,8 @@ var wargame = {
         return this.wordPicked;
     },
     splitWord: function (word) {
-        this.wordSplit = word.split("");
-        return this.wordSplit;
+        this.wordSplitted = word.split("");
+        return this.wordSplitted;
     },
     ifExist: function (key) {
         for (var i = 0; i < this.lettersTried.length; i++) {
@@ -39,20 +39,25 @@ document.onkeyup = function (event) {
     if (wargame.pressStart) {
 
         if ((event.keyCode >= 65) && (event.keyCode <= 90)){
-            if (triesLeft >= 1) {
-
+            if (wargame.triesLeft >= 1) {
+                
                 var userGuess = event.key.toLowerCase();
 
-                for (var i = 0; i < wargame.wordSplitted; i++) {
+                for (var i = 0; i < wargame.wordSplitted.length; i++) {
                     
                     if (userGuess == wargame.wordSplitted[i]) {
-                        
+                        var match = document.querySelector("div.score-board span[data-letter='" + i + "']");
+                        match.innerHTML = wargame.wordSplitted[i];
+                    }
+
+                    else {
+                        console.log("I found no matches");
                     }
                 }
             }
 
             else {
-                alert("Game over man!")
+                alert("Game over man!");
             }
         }
     }
@@ -72,7 +77,7 @@ document.onkeyup = function (event) {
 
                 main.append(
                     wargame.setAttr(letterSpan, {
-                        "data-letter": wargame.wordSplitted[i],
+                        "data-letter": i,
                         "class": "word-letter",
                     })
                 );

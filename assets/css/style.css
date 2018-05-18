@@ -12,6 +12,7 @@ body {
 
 	.word-letter {
 		border-bottom: 1px solid lime;
+		padding: 0px 15px 0px 15px;
 		margin: 0px 2px 0px 2px;
 	}
 
