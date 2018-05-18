@@ -1,37 +1,45 @@
-// Set the score number variables and "Guesses so far" array.
 var wargame = {
     winsScore: 0,
     triesLeft: 10,
     lettersGuessed: [],
-    // Set array from A to Z for the computer to guess.
-    letterBank: [
-        "a", "b", "c", "d", "e", 
-        "f", "g", "h", "i", "j", 
-        "k", "l", "m", "n", "o", 
-        "p", "q", "r", "s", "t", 
-        "u", "v", "w", "x", "y", 
-        "z"
-    ],
     wordBank: [
         "wargames",
         "David",
         "Jennifer",
     ],
+    pressStart: false,
     choseWord: function(array){
         var computerChoice = array[Math.floor(Math.random() * array.length)];
+        return computerChoice;
     },
-    ifExist: function(param, array) {
+    ifExist: function(string, array) {
         for (var i = 0; i < array.length; i++) {
-            if (param == (array[i])) {
+            if (string == (array[i])) {
                 return true; 
             }
         }
     },
+    
 }
 
 document.onkeyup = function(event) {
     
-    //Creates a variable to store the key the player has pressed.
-    var userGuess = event.key.toLowerCase();
-    console.log(userGuess)
+    if (wargame.pressStart())
+        if ((event.keyCode >= 65) && (event.keyCode <= 90)){
+
+            if (triesLeft >= 1) {
+                var userGuess = event.key.toLowerCase();
+            }
+
+            else {
+                alert("Game over!");
+            }
+            
+            var userGuess = event.key.toLowerCase();
+
+        }
+    else {
+        alert("Game starting...");
+    }
+
 }
