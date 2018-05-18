@@ -10,6 +10,11 @@ body {
 	src: url(../fonts/Wargames.ttf) format("truetype");
   }
 
+	.word-letter {
+		border-bottom: 1px solid lime;
+		margin: 0px 2px 0px 2px;
+	}
+
 /*
  *Blinking Cursor
  */
