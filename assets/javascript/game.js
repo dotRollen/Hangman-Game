@@ -12,6 +12,7 @@ var wargame = {
     wordSplitted: [],
     pickWord: function () {
         this.wordPicked = this.wordBank[Math.floor(Math.random() * this.wordBank.length)];
+
         return this.wordPicked;
     },
     splitWord: function (word) {
@@ -32,6 +33,13 @@ var wargame = {
         }
         return elem;
     },
+    checkMatch: function (str, array) {
+        var indexes = [], i;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === str) indexes.push(i);
+        }
+        return indexes;
+    }
 }
 
 document.onkeyup = function (event) {
@@ -42,22 +50,33 @@ document.onkeyup = function (event) {
             if (wargame.triesLeft >= 1) {
                 
                 var userGuess = event.key.toLowerCase();
+                wargame.lettersTried.push(userGuess);
+                document.getElementById("letters-tried").innerHTML = wargame.lettersTried;
+                var match = wargame.checkMatch(userGuess, wargame.wordSplitted);
 
-                for (var i = 0; i < wargame.wordSplitted.length; i++) {
-                    
-                    if (userGuess == wargame.wordSplitted[i]) {
-                        var match = document.querySelector("div.score-board span[data-letter='" + i + "']");
-                        match.innerHTML = wargame.wordSplitted[i];
-                    }
-
-                    else {
-                        console.log("I found no matches");
+                if ( match.length > 0) {
+                    for (var i = 0; i < match.length; i++) {
+                        var matchedDiv = document.querySelector(
+                            "div.score-board span[data-letter='" + match[i] + "']"
+                        );
+                        matchedDiv.innerHTML = wargame.wordSplitted[match[i]];
                     }
                 }
+
+                else {
+
+                    wargame.triesLeft--;
+                    document.getElementById("tries-left").innerHTML = wargame.triesLeft;
+                    
+                }
+
+                //var match = document.querySelector("div.score-board span[data-letter='" + i + "']");
+                //match.innerHTML = wargame.wordSplitted[i];
             }
 
             else {
                 alert("Game over man!");
+                wargamer.pressStart = false;
             }
         }
     }
