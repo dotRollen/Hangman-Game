@@ -1,4 +1,5 @@
 var wargame = {
+    //Defining all the variables for the game to use.
     winsScore: 0,
     triesLeft: 12,
     lettersTried: [],
@@ -20,6 +21,8 @@ var wargame = {
     ttySpeed: 100,
     ttyLoc: "",
     ttyWriter: function () {
+        //Slowly types out the letters from a string and recursively
+        //goes back and types the next letter to simulate typing.
         if (wargame.ttyCounter < wargame.ttyText.length) {
             document.getElementById("typedtext").innerHTML += wargame.ttyText.charAt(wargame.ttyCounter);
             wargame.ttyCounter++;
@@ -30,6 +33,7 @@ var wargame = {
         }
     },
     welcome: "Greetings Professor Falken...",
+    //HTML used to replace the HTML in the element id WOPR
     shallWePlay: {
         html: `
             <div class="voice">
@@ -91,6 +95,9 @@ var wargame = {
         text: "STRANGE GAME... THE ONLY WINNING MOVE IS NOT TO PLAY...",
     },
     resetGame: function () {
+        //Resets the game to game variables but keeps the winning games
+        //created a function to add attributes to the element without
+        //being repatitive
         for (var i = 0; i < this.wordSplitted.length; i++) {
     
             var main = document.getElementById("word");
@@ -111,15 +118,23 @@ var wargame = {
         this.pressStart = true;
     },
     pickWord: function () {
+        //Joshua... uhh the Game picks a random word to play
+        //then returns the word
         this.wordPicked = this.wordBank[Math.floor(Math.random() * this.wordBank.length)];
 
         return this.wordPicked;
     },
-    splitWord: function (word) {
-        this.wordSplitted = word.split("");
+    splitWord: function (str) {
+        //To allow for easy checks and generating the blank spaces on HTML
+        //the word that is passed to this function is split into an array
+        //of letters.
+        this.wordSplitted = str.split("");
         return this.wordSplitted;
     },
     ifExist: function (key) {
+        //Checks if the letter typed by the player has already been entered
+        //if entered it will return a true value, otherwise null
+        //helps with reducing the amount of chances the player has
         for (var i = 0; i < this.lettersTried.length; i++) {
             if (key == (this.lettersTried[i])) {
                 return true; 
@@ -127,6 +142,8 @@ var wargame = {
         }
     },
     setAttr: function (elem, attrs) {
+        //A helper function for adding attributes to elements with out 
+        //being repetitive in the code
         for (var key in attrs) {
             elem.setAttribute(key, attrs[key]);
             elem.innerHTML = "&nbsp;";
@@ -134,6 +151,9 @@ var wargame = {
         return elem;
     },
     checkMatch: function (str, array) {
+        //Checks to see if a letter typed by the player is in the array
+        //the player is currently playing against. In this game that array
+        //would be the obj.wordSplitted
         var indexes = [], i;
         for (var i = 0; i < array.length; i++) {
             if (array[i] === str) indexes.push(i);
@@ -141,10 +161,15 @@ var wargame = {
         return indexes;
     },
     storeGuess: function (str) {
+        //Stores the guess of the player into an array that can be wiped,
+        // added to or called back when needed
         this.lettersTried.push(str);
         document.getElementById("letters-tried").innerHTML = this.lettersTried;
     },
     guessedTwice: function (str, array) {
+        //Makes sure the player hasn't already used this letter
+        // returns true if they did but does nothing and also prevents
+        // any duplicates from being added to the obj.lettersTried array
         for (var i = 0; i < array.length; i++) {
             
             if (str == (array[i])) {
@@ -155,6 +180,8 @@ var wargame = {
 }
 
 window.onload = function() {
+    //Animation for the "Greetings" first page load
+    //prompts the player to press Enter
     wargame.ttyText = wargame.welcome;
     wargame.ttyWriter();
 }
@@ -162,19 +189,36 @@ window.onload = function() {
 document.onkeyup = function (event) {
 
     if (wargame.pressStart) {
-
+        //Game checks if the game is already already in motion, if it is
+        //the userguesses will now be stored and matched against the 
+        //program word choice
         if ((event.keyCode >= 65) && (event.keyCode <= 90)){
-            
+            //Takes only the key values of A - Z to play the game
+            //better option then manually typing in every letter
+            //then iterating over all the letters
             if (wargame.triesLeft > 1) {
-                
+                //Checks if the player has any tries left
+                // as long as their tries are 1 or over the game will continue
                 var userGuess = event.key.toLowerCase();                
+                //player guess and obj.wordSplitted are sent to a function that 
+                //checks if the player has any matches in the array, if it matches
+                //it returns a new array with the positions that it matched as the values
+                //in the array
                 var match = wargame.checkMatch(userGuess, wargame.wordSplitted);
+                
 
                 if (wargame.guessedTwice(userGuess, wargame.lettersTried)) {
+                    //checks if player has already guessed the letter
                     return true;
                 }
 
                 else if ( match.length > 0) {
+                    //if obj.checkMatch found matches and the length is more then 0
+                    // the game will then continue to add those values to the HTML
+                    //the array that came back from checkMatch have values of the index 
+                    //with the corresponded letter in order for obj.wordSplitted.
+                    //That helps with keeping the HTML up to date and also 
+                    //create a solved word array
                     for (var i = 0; i < match.length; i++) {
                         var matchedDiv = document.querySelector(
                             "div.terminal-2 span[data-letter='" + match[i] + "']"
@@ -185,6 +229,8 @@ document.onkeyup = function (event) {
                     wargame.storeGuess(userGuess);
                     
                     if (wargame.wordSolved.length === wargame.wordSplitted.length) {
+                        //Checks if the word has the same length as the wordSplitted
+                        //if it does the game is over and the player wins
                         wargame.winsScore++;
 
                         document.getElementById("wins-score").innerHTML = wargame.winsScore;
@@ -198,7 +244,8 @@ document.onkeyup = function (event) {
                 }
 
                 else {
-
+                    //if the player does not have a duplicate letter typed and does
+                    //not have a matching guess, the player loses a chance
                     wargame.triesLeft--;
                     document.getElementById("tries-left").innerHTML = wargame.triesLeft;
                     wargame.storeGuess(userGuess);
@@ -207,6 +254,9 @@ document.onkeyup = function (event) {
             }
 
             else {
+                //if the player has less then 1 as the tries left,
+                //the game ends and the player can longer continue
+                //they will have to press N to restart the game
                 document.getElementById("WOPR").innerHTML = wargame.youLose.html;
                 wargame.ttyText = wargame.youLose.text;
                 wargame.ttyWriter();
@@ -219,7 +269,10 @@ document.onkeyup = function (event) {
     else {
 
         if (wargame.loggedIn == false && event.keyCode == 13) {
-
+            //if the player presses enter after first prompt and has not played the game
+            //already condition the game prompts with some aesthetics and asks the player
+            // to press Y to play the game sets the game to obj.loggedIn true so that 
+            //the player does not see this html again
             document.getElementById("WOPR").innerHTML = wargame.shallWePlay.html;
             wargame.ttyText = wargame.shallWePlay.text;
             wargame.ttyWriter();
@@ -229,7 +282,11 @@ document.onkeyup = function (event) {
 
         else {
             if ((event.keyCode == 89) && (wargame.newGame == false) ) {
-
+                // checks if the player has not finished the first game with 
+                //obj.newGame as false. obj.newGame is set to true only when
+                //a player has lost or won a game. This resets the game to a
+                //new game with counter variables at default and sets
+                //obj.pressStart to true for the next time the player types
                 document.getElementById("WOPR").innerHTML = wargame.beginPlay.html;
                 wargame.ttyText = wargame.beginPlay.text;
                 wargame.ttyWriter();
@@ -241,7 +298,9 @@ document.onkeyup = function (event) {
                 wargame.resetGame();
             }
             else if ((event.keyCode == 78) && (wargame.newGame)){
-
+                //if a player has finished a game win/lose this condition checks
+                //that it is true and will reset the game while keeping the 
+                //relevant counter information
                 document.getElementById("WOPR").innerHTML = wargame.beginPlay.html;
                 wargame.ttyText = wargame.beginPlay.text;
                 wargame.ttyWriter();
